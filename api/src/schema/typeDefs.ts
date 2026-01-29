@@ -21,6 +21,8 @@ export const typeDefs = gql`
     icon: String!
     title: String!
     description: String!
+    category: String
+    skills: [SkillWithYears!]!
     sortOrder: Int!
   }
 

@@ -20,6 +20,9 @@ export class Service {
   @Column({ type: 'text' })
   description!: string;
 
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  category?: string;
+
   @Column({ type: 'int', name: 'sort_order', default: 0 })
   sortOrder!: number;
 

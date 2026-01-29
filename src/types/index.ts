@@ -3,6 +3,8 @@ export interface Service {
   icon: string;
   title: string;
   description: string;
+  category?: string;
+  skills?: SkillWithYears[];
   sortOrder?: number;
 }
 

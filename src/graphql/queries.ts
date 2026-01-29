@@ -7,6 +7,12 @@ export const GET_SERVICES = gql`
       icon
       title
       description
+      category
+      skills {
+        name
+        years
+        category
+      }
       sortOrder
     }
   }
