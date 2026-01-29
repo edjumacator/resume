@@ -28,6 +28,7 @@ export const GET_EXPERIENCES = gql`
     aggregatedSkills {
       name
       years
+      category
     }
   }
 `;

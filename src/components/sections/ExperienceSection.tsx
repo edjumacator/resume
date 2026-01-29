@@ -93,6 +93,7 @@ export function ExperienceSection() {
                     <Autocomplete
                       multiple
                       options={data.aggregatedSkills}
+                      groupBy={(option) => option.category || 'Other'}
                       getOptionLabel={(option) => `${option.name} (${option.years} yrs)`}
                       value={selectedSkills}
                       onChange={(_, newValue) => setSelectedSkills(newValue)}
@@ -107,6 +108,26 @@ export function ExperienceSection() {
                             },
                           }}
                         />
+                      )}
+                      renderGroup={(params) => (
+                        <li key={params.key}>
+                          <Typography
+                            variant="subtitle2"
+                            sx={{
+                              fontWeight: 600,
+                              color: 'primary.main',
+                              px: 2,
+                              py: 1,
+                              backgroundColor: 'background.paper',
+                              position: 'sticky',
+                              top: -8,
+                              zIndex: 1,
+                            }}
+                          >
+                            {params.group}
+                          </Typography>
+                          <ul style={{ padding: 0 }}>{params.children}</ul>
+                        </li>
                       )}
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => {

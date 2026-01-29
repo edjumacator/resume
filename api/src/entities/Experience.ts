@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
+import { Skill } from './Skill.js';
 
 @Entity('experiences')
 export class Experience {
@@ -31,6 +34,14 @@ export class Experience {
 
   @Column({ type: 'varchar', array: true, default: [] })
   skills!: string[];
+
+  @ManyToMany(() => Skill, (skill) => skill.experiences)
+  @JoinTable({
+    name: 'experience_skills',
+    joinColumn: { name: 'experience_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'skill_id', referencedColumnName: 'id' },
+  })
+  skillEntities!: Skill[];
 
   @Column({ type: 'int', name: 'sort_order', default: 0 })
   sortOrder!: number;

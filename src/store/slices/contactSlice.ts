@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { apolloClient } from '../../graphql/client';
 import { SUBMIT_CONTACT } from '../../graphql/queries';
-import type { ContactFormData } from '../../types';
+import type { ContactFormData, ContactSubmissionResult } from '../../types';
+
+interface SubmitContactResponse {
+  submitContact: ContactSubmissionResult;
+}
 
 interface ContactState {
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -16,7 +20,7 @@ const initialState: ContactState = {
 export const submitContactForm = createAsyncThunk(
   'contact/submit',
   async (data: ContactFormData) => {
-    const { data: result } = await apolloClient.mutate({
+    const { data: result } = await apolloClient.mutate<SubmitContactResponse>({
       mutation: SUBMIT_CONTACT,
       variables: { input: data },
     });

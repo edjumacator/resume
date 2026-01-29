@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { Service } from '../entities/Service.js';
 import { Experience } from '../entities/Experience.js';
+import { Skill } from '../entities/Skill.js';
 import { Project } from '../entities/Project.js';
 import { Testimonial } from '../entities/Testimonial.js';
 import { ContactSubmission } from '../entities/ContactSubmission.js';
@@ -18,6 +19,6 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'resume_db',
   synchronize: false,
   logging: process.env.NODE_ENV !== 'production',
-  entities: [Service, Experience, Project, Testimonial, ContactSubmission],
+  entities: [Service, Experience, Skill, Project, Testimonial, ContactSubmission],
   migrations: ['migrations/*.ts'],
 });

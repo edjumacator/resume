@@ -1,21 +1,56 @@
-import { Card, CardContent, Typography, Box, Avatar, Rating } from '@mui/material';
+import { useState, useEffect } from 'react';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Avatar,
+  Rating,
+  Button,
+  Collapse,
+} from '@mui/material';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import type { Testimonial } from '../../types';
 
 interface TestimonialCardProps {
   testimonial: Testimonial;
+  resetKey?: number;
 }
 
-export function TestimonialCard({ testimonial }: TestimonialCardProps) {
+const COLLAPSED_HEIGHT = 120;
+const MAX_PREVIEW_LENGTH = 200;
+
+export function TestimonialCard({ testimonial, resetKey }: TestimonialCardProps) {
+  const [expanded, setExpanded] = useState(false);
+  const isLongQuote = testimonial.quote.length > MAX_PREVIEW_LENGTH;
+
+  // Collapse when slide changes
+  useEffect(() => {
+    setExpanded(false);
+  }, [resetKey]);
+
   return (
     <Card
       sx={{
         height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
         position: 'relative',
         overflow: 'visible',
+        minHeight: 320,
       }}
     >
-      <CardContent sx={{ p: 4, pt: 5 }}>
+      <CardContent
+        sx={{
+          p: 4,
+          pt: 5,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+        }}
+      >
         <FormatQuoteIcon
           sx={{
             position: 'absolute',
@@ -36,14 +71,52 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
             },
           }}
         />
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          sx={{ mb: 3, fontStyle: 'italic' }}
-        >
-          "{testimonial.quote}"
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+
+        {/* Quote with expand/collapse */}
+        <Box sx={{ flex: 1, mb: 2 }}>
+          {isLongQuote ? (
+            <>
+              <Collapse in={expanded} collapsedSize={COLLAPSED_HEIGHT}>
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ fontStyle: 'italic', whiteSpace: 'pre-line' }}
+                >
+                  "{testimonial.quote}"
+                </Typography>
+              </Collapse>
+              <Button
+                size="small"
+                onClick={() => setExpanded(!expanded)}
+                endIcon={expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                sx={{
+                  mt: 1,
+                  textTransform: 'none',
+                  color: 'primary.main',
+                  p: 0,
+                  minWidth: 'auto',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                    textDecoration: 'underline',
+                  },
+                }}
+              >
+                {expanded ? 'Show less' : 'Read more'}
+              </Button>
+            </>
+          ) : (
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ fontStyle: 'italic', whiteSpace: 'pre-line' }}
+            >
+              "{testimonial.quote}"
+            </Typography>
+          )}
+        </Box>
+
+        {/* Author info */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 'auto' }}>
           <Avatar
             sx={{
               width: 48,

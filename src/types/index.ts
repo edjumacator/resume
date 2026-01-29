@@ -9,6 +9,7 @@ export interface Service {
 export interface SkillWithYears {
   name: string;
   years: number;
+  category?: string;
 }
 
 export interface Experience {
@@ -50,4 +51,9 @@ export interface ContactFormData {
   email: string;
   message: string;
   privacyAccepted: boolean;
+}
+
+export interface ContactSubmissionResult {
+  success: boolean;
+  message: string;
 }

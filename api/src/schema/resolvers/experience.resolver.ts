@@ -43,28 +43,45 @@ function calculateYears(startDate: string, endDate: string): number {
 }
 
 // Extended type for experiences with pre-computed cumulative skill years
+type SkillYearsData = { years: number; category: string };
 type ExperienceWithCumulativeSkills = Experience & {
-  _cumulativeSkillYears?: Map<string, number>;
+  _cumulativeSkillYears?: Map<string, SkillYearsData>;
 };
 
 export const experienceResolvers = {
   Query: {
     experiences: async (_: unknown, __: unknown, { dataSources }: GraphQLContext) => {
       const repo = dataSources.db.getRepository(Experience);
-      const experiences = await repo.find({ order: { sortOrder: 'ASC' } });
+      const experiences = await repo.find({
+        order: { sortOrder: 'ASC' },
+        relations: ['skillEntities'],
+      });
 
-      // Build cumulative skill years map across all experiences
-      const skillYearsMap = new Map<string, number>();
+      // Build cumulative skill years map across all experiences (with category)
+      const skillYearsMap = new Map<string, SkillYearsData>();
       for (const exp of experiences) {
         const years = calculateYears(exp.startDate, exp.endDate);
-        for (const skill of exp.skills || []) {
-          skillYearsMap.set(skill, (skillYearsMap.get(skill) || 0) + years);
+        // Use skillEntities if available, fall back to skills array
+        const skills = exp.skillEntities?.length > 0
+          ? exp.skillEntities.map((s) => ({ name: s.name, category: s.category }))
+          : (exp.skills || []).map((name) => ({ name, category: 'Other' }));
+
+        for (const skill of skills) {
+          const existing = skillYearsMap.get(skill.name);
+          skillYearsMap.set(skill.name, {
+            years: (existing?.years || 0) + years,
+            category: skill.category,
+          });
         }
       }
 
       // Attach cumulative skillsWithYears map to each experience
       return experiences.map((exp) => ({
         ...exp,
+        // Derive skills array from skillEntities for backward compatibility
+        skills: exp.skillEntities?.length > 0
+          ? exp.skillEntities.map((s) => s.name)
+          : exp.skills,
         _cumulativeSkillYears: skillYearsMap,
       }));
     },
@@ -74,20 +91,29 @@ export const experienceResolvers = {
     },
     aggregatedSkills: async (_: unknown, __: unknown, { dataSources }: GraphQLContext) => {
       const repo = dataSources.db.getRepository(Experience);
-      const experiences = await repo.find();
+      const experiences = await repo.find({ relations: ['skillEntities'] });
 
-      // Build cumulative skill years map across all experiences
-      const skillYearsMap = new Map<string, number>();
+      // Build cumulative skill years map across all experiences (with category)
+      const skillYearsMap = new Map<string, SkillYearsData>();
       for (const exp of experiences) {
         const years = calculateYears(exp.startDate, exp.endDate);
-        for (const skill of exp.skills || []) {
-          skillYearsMap.set(skill, (skillYearsMap.get(skill) || 0) + years);
+        // Use skillEntities if available, fall back to skills array
+        const skills = exp.skillEntities?.length > 0
+          ? exp.skillEntities.map((s) => ({ name: s.name, category: s.category }))
+          : (exp.skills || []).map((name) => ({ name, category: 'Other' }));
+
+        for (const skill of skills) {
+          const existing = skillYearsMap.get(skill.name);
+          skillYearsMap.set(skill.name, {
+            years: (existing?.years || 0) + years,
+            category: skill.category,
+          });
         }
       }
 
       // Convert map to array and sort by years descending
       return Array.from(skillYearsMap.entries())
-        .map(([name, years]) => ({ name, years }))
+        .map(([name, data]) => ({ name, years: data.years, category: data.category }))
         .sort((a, b) => b.years - a.years);
     },
   },
@@ -102,20 +128,33 @@ export const experienceResolvers = {
     skillsWithYears: (experience: ExperienceWithCumulativeSkills) => {
       const skillYearsMap = experience._cumulativeSkillYears;
 
+      // Get skills from skillEntities if available, otherwise from skills array
+      const skillNames = experience.skillEntities?.length > 0
+        ? experience.skillEntities.map((s) => s.name)
+        : (experience.skills || []);
+
       // If cumulative map is available (from experiences query), use it
       if (skillYearsMap) {
-        return (experience.skills || []).map((skill) => ({
-          name: skill,
-          years: skillYearsMap.get(skill) || 0,
-        }));
+        return skillNames.map((skill) => {
+          const data = skillYearsMap.get(skill);
+          return {
+            name: skill,
+            years: data?.years || 0,
+            category: data?.category || 'Other',
+          };
+        });
       }
 
       // Fallback for single experience query: use per-job duration
       const years = calculateYears(experience.startDate, experience.endDate);
-      return (experience.skills || []).map((skill) => ({
-        name: skill,
-        years,
-      }));
+      return skillNames.map((skill) => {
+        const skillEntity = experience.skillEntities?.find((s) => s.name === skill);
+        return {
+          name: skill,
+          years,
+          category: skillEntity?.category || 'Other',
+        };
+      });
     },
   },
 };
