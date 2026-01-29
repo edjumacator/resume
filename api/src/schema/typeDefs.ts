@@ -4,6 +4,11 @@ const gql = graphqlTag.default ?? graphqlTag;
 export const typeDefs = gql`
   extend schema @link(url: "https://specs.apollo.dev/federation/v2.0", import: ["@key"])
 
+  type SkillWithYears {
+    name: String!
+    years: Float!
+  }
+
   type Service @key(fields: "id") {
     id: ID!
     icon: String!
@@ -20,6 +25,8 @@ export const typeDefs = gql`
     role: String!
     description: String!
     summary: String
+    skills: [String!]!
+    skillsWithYears: [SkillWithYears!]!
     sortOrder: Int!
   }
 
@@ -58,6 +65,7 @@ export const typeDefs = gql`
 
     experiences: [Experience!]!
     experience(id: ID!): Experience
+    aggregatedSkills: [SkillWithYears!]!
 
     projects(category: String): [Project!]!
     project(id: ID!): Project

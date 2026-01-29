@@ -6,6 +6,11 @@ export interface Service {
   sortOrder?: number;
 }
 
+export interface SkillWithYears {
+  name: string;
+  years: number;
+}
+
 export interface Experience {
   id: string;
   startDate: string;
@@ -14,6 +19,8 @@ export interface Experience {
   role: string;
   description: string;
   summary?: string | null;
+  skills?: string[];
+  skillsWithYears?: SkillWithYears[];
   sortOrder?: number;
 }
 

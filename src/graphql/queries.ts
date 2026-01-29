@@ -24,6 +24,10 @@ export const GET_EXPERIENCES = gql`
       summary
       sortOrder
     }
+    aggregatedSkills {
+      name
+      years
+    }
   }
 `;
 

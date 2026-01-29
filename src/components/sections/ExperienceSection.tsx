@@ -1,11 +1,16 @@
-import { Box, Container, Typography, Grid, CircularProgress } from '@mui/material';
+import { Box, Container, Typography, Grid, CircularProgress, Chip, Stack } from '@mui/material';
 import { useQuery } from '@apollo/client/react';
 import { TimelineItem } from '../ui/TimelineItem';
 import { GET_EXPERIENCES } from '../../graphql/queries';
-import type { Experience } from '../../types';
+import type { Experience, SkillWithYears } from '../../types';
+
+interface ExperiencesQueryResult {
+  experiences: Experience[];
+  aggregatedSkills: SkillWithYears[];
+}
 
 export function ExperienceSection() {
-  const { data, loading, error } = useQuery<{ experiences: Experience[] }>(GET_EXPERIENCES);
+  const { data, loading, error } = useQuery<ExperiencesQueryResult>(GET_EXPERIENCES);
 
   return (
     <Box
@@ -43,7 +48,7 @@ export function ExperienceSection() {
             </Box>
           </Grid>
 
-          {/* Right Column - Timeline */}
+          {/* Right Column - Skills & Timeline */}
           <Grid size={{ xs: 12, md: 8 }}>
             {loading ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
@@ -53,6 +58,38 @@ export function ExperienceSection() {
               <Typography color="error">Failed to load experiences</Typography>
             ) : (
               <Box>
+                {/* Aggregated Skills Section */}
+                {data?.aggregatedSkills && data.aggregatedSkills.length > 0 && (
+                  <Box sx={{ mb: 4 }}>
+                    <Typography
+                      variant="h5"
+                      component="h3"
+                      sx={{ mb: 2, fontWeight: 600 }}
+                    >
+                      Skills & Technologies
+                    </Typography>
+                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                      {data.aggregatedSkills.map((skill) => (
+                        <Chip
+                          key={skill.name}
+                          label={`${skill.name} - ${skill.years} yrs`}
+                          size="small"
+                          sx={{
+                            backgroundColor: 'primary.main',
+                            color: 'white',
+                            fontWeight: 500,
+                            mb: 1,
+                            '&:hover': {
+                              backgroundColor: 'primary.dark',
+                            },
+                          }}
+                        />
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+
+                {/* Timeline */}
                 {data?.experiences.map((experience, index) => (
                   <TimelineItem
                     key={experience.id}

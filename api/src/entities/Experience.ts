@@ -29,6 +29,9 @@ export class Experience {
   @Column({ type: 'text', nullable: true })
   summary!: string | null;
 
+  @Column({ type: 'varchar', array: true, default: [] })
+  skills!: string[];
+
   @Column({ type: 'int', name: 'sort_order', default: 0 })
   sortOrder!: number;
 
