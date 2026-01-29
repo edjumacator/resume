@@ -1,14 +1,22 @@
 import { useState } from 'react';
-import { Box, Container, Typography, Grid, Chip } from '@mui/material';
+import { Box, Container, Typography, Grid, Chip, CircularProgress } from '@mui/material';
+import { useQuery } from '@apollo/client/react';
 import { ProjectCard } from '../ui/ProjectCard';
-import { projects, categories } from '../../data/portfolio';
+import { GET_PROJECTS } from '../../graphql/queries';
+import type { Project } from '../../types';
+
+interface ProjectsData {
+  projects: Project[];
+  projectCategories: string[];
+}
 
 export function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState('All');
+  const { data, loading, error } = useQuery<ProjectsData>(GET_PROJECTS, {
+    variables: activeCategory === 'All' ? {} : { category: activeCategory },
+  });
 
-  const filteredProjects = activeCategory === 'All'
-    ? projects
-    : projects.filter((project) => project.category === activeCategory);
+  const categories = ['All', ...(data?.projectCategories ?? [])];
 
   return (
     <Box
@@ -73,13 +81,23 @@ export function PortfolioSection() {
         </Box>
 
         {/* Projects Grid */}
-        <Grid container spacing={4}>
-          {filteredProjects.map((project) => (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.id}>
-              <ProjectCard project={project} />
-            </Grid>
-          ))}
-        </Grid>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Typography color="error" textAlign="center">
+            Failed to load projects
+          </Typography>
+        ) : (
+          <Grid container spacing={4}>
+            {data?.projects.map((project) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={project.id}>
+                <ProjectCard project={project} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Container>
     </Box>
   );

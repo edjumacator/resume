@@ -1,8 +1,12 @@
-import { Box, Container, Typography, Grid } from '@mui/material';
+import { Box, Container, Typography, Grid, CircularProgress } from '@mui/material';
+import { useQuery } from '@apollo/client/react';
 import { ServiceCard } from '../ui/ServiceCard';
-import { services } from '../../data/services';
+import { GET_SERVICES } from '../../graphql/queries';
+import type { Service } from '../../types';
 
 export function ServicesSection() {
+  const { data, loading, error } = useQuery<{ services: Service[] }>(GET_SERVICES);
+
   return (
     <Box
       id="services"
@@ -41,13 +45,23 @@ export function ServicesSection() {
         </Box>
 
         {/* Services Grid */}
-        <Grid container spacing={4}>
-          {services.map((service) => (
-            <Grid size={{ xs: 12, md: 4 }} key={service.id}>
-              <ServiceCard service={service} />
-            </Grid>
-          ))}
-        </Grid>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Typography color="error" textAlign="center">
+            Failed to load services
+          </Typography>
+        ) : (
+          <Grid container spacing={4}>
+            {data?.services.map((service) => (
+              <Grid size={{ xs: 12, md: 4 }} key={service.id}>
+                <ServiceCard service={service} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Container>
     </Box>
   );

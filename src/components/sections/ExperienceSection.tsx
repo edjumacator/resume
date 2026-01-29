@@ -1,8 +1,12 @@
-import { Box, Container, Typography, Grid } from '@mui/material';
+import { Box, Container, Typography, Grid, CircularProgress } from '@mui/material';
+import { useQuery } from '@apollo/client/react';
 import { TimelineItem } from '../ui/TimelineItem';
-import { experiences } from '../../data/experience';
+import { GET_EXPERIENCES } from '../../graphql/queries';
+import type { Experience } from '../../types';
 
 export function ExperienceSection() {
+  const { data, loading, error } = useQuery<{ experiences: Experience[] }>(GET_EXPERIENCES);
+
   return (
     <Box
       id="experience"
@@ -41,15 +45,23 @@ export function ExperienceSection() {
 
           {/* Right Column - Timeline */}
           <Grid size={{ xs: 12, md: 8 }}>
-            <Box>
-              {experiences.map((experience, index) => (
-                <TimelineItem
-                  key={experience.id}
-                  experience={experience}
-                  isLast={index === experiences.length - 1}
-                />
-              ))}
-            </Box>
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : error ? (
+              <Typography color="error">Failed to load experiences</Typography>
+            ) : (
+              <Box>
+                {data?.experiences.map((experience, index) => (
+                  <TimelineItem
+                    key={experience.id}
+                    experience={experience}
+                    isLast={index === (data?.experiences.length ?? 0) - 1}
+                  />
+                ))}
+              </Box>
+            )}
           </Grid>
         </Grid>
       </Container>

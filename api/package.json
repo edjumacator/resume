@@ -1,0 +1,36 @@
+{
+  "name": "resume-api",
+  "version": "1.0.0",
+  "description": "GraphQL API for resume portfolio",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typeorm": "typeorm-ts-node-esm",
+    "migration:generate": "npm run typeorm -- migration:generate -d src/datasources/database.ts",
+    "migration:run": "npm run typeorm -- migration:run -d src/datasources/database.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d src/datasources/database.ts"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.11.0",
+    "@apollo/subgraph": "^2.9.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "graphql": "^16.9.0",
+    "graphql-tag": "^2.12.6",
+    "pg": "^8.13.1",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.10.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

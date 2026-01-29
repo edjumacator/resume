@@ -3,6 +3,7 @@ export interface Service {
   icon: string;
   title: string;
   description: string;
+  sortOrder?: number;
 }
 
 export interface Experience {
@@ -12,6 +13,7 @@ export interface Experience {
   company: string;
   role: string;
   description: string;
+  sortOrder?: number;
 }
 
 export interface Project {
@@ -19,8 +21,9 @@ export interface Project {
   title: string;
   category: string;
   tools: string[];
-  image: string;
-  link?: string;
+  imageUrl: string;
+  link?: string | null;
+  sortOrder?: number;
 }
 
 export interface Testimonial {
@@ -28,9 +31,10 @@ export interface Testimonial {
   name: string;
   role: string;
   company: string;
-  avatar: string;
+  avatarUrl: string;
   rating: number;
   quote: string;
+  sortOrder?: number;
 }
 
 export interface ContactFormData {

@@ -1,8 +1,12 @@
-import { Box, Container, Typography, Grid } from '@mui/material';
+import { Box, Container, Typography, Grid, CircularProgress } from '@mui/material';
+import { useQuery } from '@apollo/client/react';
 import { TestimonialCard } from '../ui/TestimonialCard';
-import { testimonials } from '../../data/testimonials';
+import { GET_TESTIMONIALS } from '../../graphql/queries';
+import type { Testimonial } from '../../types';
 
 export function TestimonialsSection() {
+  const { data, loading, error } = useQuery<{ testimonials: Testimonial[] }>(GET_TESTIMONIALS);
+
   return (
     <Box
       id="testimonials"
@@ -41,13 +45,23 @@ export function TestimonialsSection() {
         </Box>
 
         {/* Testimonials Grid */}
-        <Grid container spacing={4}>
-          {testimonials.map((testimonial) => (
-            <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={testimonial.id}>
-              <TestimonialCard testimonial={testimonial} />
-            </Grid>
-          ))}
-        </Grid>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Typography color="error" textAlign="center">
+            Failed to load testimonials
+          </Typography>
+        ) : (
+          <Grid container spacing={4}>
+            {data?.testimonials.map((testimonial) => (
+              <Grid size={{ xs: 12, sm: 6, lg: 3 }} key={testimonial.id}>
+                <TestimonialCard testimonial={testimonial} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Container>
     </Box>
   );

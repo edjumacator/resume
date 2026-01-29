@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { apolloClient } from '../../graphql/client';
+import { SUBMIT_CONTACT } from '../../graphql/queries';
 import type { ContactFormData } from '../../types';
 
 interface ContactState {
@@ -14,12 +16,16 @@ const initialState: ContactState = {
 export const submitContactForm = createAsyncThunk(
   'contact/submit',
   async (data: ContactFormData) => {
-    // Mock API call - simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const { data: result } = await apolloClient.mutate({
+      mutation: SUBMIT_CONTACT,
+      variables: { input: data },
+    });
 
-    // Simulate success (in production, this would be an actual API call)
-    console.log('Form submitted:', data);
-    return { success: true, message: 'Message sent successfully!' };
+    if (!result?.submitContact.success) {
+      throw new Error(result?.submitContact.message || 'Failed to send message');
+    }
+
+    return result.submitContact;
   }
 );
 
