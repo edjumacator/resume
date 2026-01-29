@@ -49,7 +49,7 @@ export function HeroSection() {
                 letterSpacing: 2,
               }}
             >
-              Software Engineering Manager
+              Senior Cloud Architect
             </Typography>
             <Typography
               variant="h1"
@@ -71,17 +71,18 @@ export function HeroSection() {
               >
                 James
               </Box>
-              <br />
-              Software Engineering Manager
+              .<br />
+              I build systems that scale.
             </Typography>
             <Typography
               variant="body1"
               color="text.secondary"
               sx={{ mb: 4, maxWidth: 480, lineHeight: 1.8 }}
             >
-              I build secure, scalable cloud infrastructure and production-grade RESTful web
-              services that power high-traffic applications. With 9+ years leading teams, I've
-              delivered solutions that played a key role in four acquisitions.
+              I architect AWS cloud platforms and lead AI initiatives while building
+              production-grade APIs that scale. From deploying EKS clusters with 99.9% uptime to
+              pioneering GraphRAG architectures, I bridge infrastructure, backend, and
+              frontend—with 12+ years delivering solutions that contributed to four acquisitions.
             </Typography>
 
             {/* CTA Buttons */}
