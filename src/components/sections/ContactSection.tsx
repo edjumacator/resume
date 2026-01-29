@@ -8,19 +8,19 @@ const contactInfo = [
   {
     icon: EmailIcon,
     label: 'Email',
-    value: 'hello@jenny.design',
-    href: 'mailto:hello@jenny.design',
+    value: 'Crittenden.work@gmail.com',
+    href: 'mailto:Crittenden.work@gmail.com',
   },
   {
     icon: PhoneIcon,
     label: 'Phone',
-    value: '+1 (555) 123-4567',
-    href: 'tel:+15551234567',
+    value: '(704) 740-9838',
+    href: 'tel:+17047409838',
   },
   {
     icon: LocationOnIcon,
     label: 'Location',
-    value: 'San Francisco, CA',
+    value: 'Charlotte, NC',
     href: null,
   },
 ];

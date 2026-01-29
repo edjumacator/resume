@@ -66,10 +66,10 @@ export function Footer() {
                 mb: 2,
               }}
             >
-              Jenny
+              James Crittenden
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3, maxWidth: 280 }}>
-              Crafting beautiful digital experiences with passion and precision. Let's create something amazing together.
+              Building scalable cloud infrastructure and leading high-performance engineering teams. Let's create something impactful together.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
               {socialLinks.map((social) => (
@@ -179,7 +179,7 @@ export function Footer() {
           }}
         >
           <Typography variant="body2" color="text.secondary">
-            &copy; {new Date().getFullYear()} Jenny. All rights reserved.
+            &copy; {new Date().getFullYear()} James Crittenden. All rights reserved.
           </Typography>
         </Box>
       </Container>

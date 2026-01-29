@@ -96,7 +96,7 @@ export function Header() {
               cursor: 'pointer',
             }}
           >
-            Jenny
+            James Crittenden
           </Typography>
 
           {isMobile ? (

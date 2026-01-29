@@ -2,9 +2,9 @@ import { Box, Container, Typography, Button, Grid } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const stats = [
-  { value: '450+', label: 'Happy Clients' },
-  { value: '10+', label: 'Years Experience' },
-  { value: '200+', label: 'Projects Completed' },
+  { value: '15+', label: 'Years Experience' },
+  { value: '4', label: 'Acquisitions' },
+  { value: '9+', label: 'Years Leadership' },
 ];
 
 export function HeroSection() {
@@ -49,7 +49,7 @@ export function HeroSection() {
                 letterSpacing: 2,
               }}
             >
-              UI/UX Designer
+              Software Engineering Manager
             </Typography>
             <Typography
               variant="h1"
@@ -69,18 +69,19 @@ export function HeroSection() {
                   WebkitTextFillColor: 'transparent',
                 }}
               >
-                Jenny
+                James
               </Box>
               <br />
-              Creative Designer
+              Software Engineering Manager
             </Typography>
             <Typography
               variant="body1"
               color="text.secondary"
               sx={{ mb: 4, maxWidth: 480, lineHeight: 1.8 }}
             >
-              I create beautiful, functional designs that help businesses connect with their
-              audiences and achieve their goals. Let's bring your vision to life.
+              I build secure, scalable cloud infrastructure and production-grade RESTful web
+              services that power high-traffic applications. With 9+ years leading teams, I've
+              delivered solutions that played a key role in four acquisitions.
             </Typography>
 
             {/* CTA Buttons */}
@@ -145,38 +146,29 @@ export function HeroSection() {
                 alignItems: 'center',
               }}
             >
-              {/* Decorative circles */}
+              {/* Profile Image with gradient border */}
               <Box
                 sx={{
                   width: { xs: 280, md: 400 },
                   height: { xs: 280, md: 400 },
                   borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(124, 58, 237, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%)',
+                  background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
+                  padding: '6px',
                   position: 'relative',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: '10%',
-                    left: '10%',
-                    right: '10%',
-                    bottom: '10%',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-                    opacity: 0.8,
-                  },
-                  '&::after': {
-                    content: '"J"',
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    fontSize: { xs: '6rem', md: '8rem' },
-                    fontWeight: 700,
-                    color: 'white',
-                    zIndex: 1,
-                  },
                 }}
-              />
+              >
+                <Box
+                  component="img"
+                  src="/profile.jpeg"
+                  alt="James Crittenden"
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </Box>
 
               {/* Floating elements */}
               <Box
