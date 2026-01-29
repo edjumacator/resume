@@ -26,6 +26,9 @@ export class Experience {
   @Column({ type: 'text' })
   description!: string;
 
+  @Column({ type: 'text', nullable: true })
+  summary!: string | null;
+
   @Column({ type: 'int', name: 'sort_order', default: 0 })
   sortOrder!: number;
 

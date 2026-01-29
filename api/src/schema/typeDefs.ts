@@ -19,6 +19,7 @@ export const typeDefs = gql`
     company: String!
     role: String!
     description: String!
+    summary: String
     sortOrder: Int!
   }
 

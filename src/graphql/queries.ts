@@ -21,6 +21,7 @@ export const GET_EXPERIENCES = gql`
       company
       role
       description
+      summary
       sortOrder
     }
   }

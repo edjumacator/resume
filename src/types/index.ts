@@ -13,6 +13,7 @@ export interface Experience {
   company: string;
   role: string;
   description: string;
+  summary?: string | null;
   sortOrder?: number;
 }
 
