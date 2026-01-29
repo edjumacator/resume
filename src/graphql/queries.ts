@@ -22,6 +22,7 @@ export const GET_EXPERIENCES = gql`
       role
       description
       summary
+      skills
       sortOrder
     }
     aggregatedSkills {
