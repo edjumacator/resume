@@ -82,7 +82,7 @@ export function HeroSection() {
               I architect AWS cloud platforms and lead AI initiatives while building
               production-grade APIs that scale. From deploying EKS clusters with 99.9% uptime to
               pioneering GraphRAG architectures, I bridge infrastructure, backend, and
-              frontend—with 12+ years delivering solutions that contributed to four acquisitions.
+              frontend. With 15+ years of experience, I've delivered solutions that contributed to four acquisitions.
             </Typography>
 
             {/* CTA Buttons */}
