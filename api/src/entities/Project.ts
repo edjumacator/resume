@@ -26,6 +26,24 @@ export class Project {
   @Column({ type: 'varchar', length: 255, nullable: true })
   link!: string | null;
 
+  @Column({ type: 'text', nullable: true })
+  description!: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'github_url' })
+  githubUrl!: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'demo_url' })
+  demoUrl!: string | null;
+
+  @Column({ type: 'boolean', default: false })
+  featured!: boolean;
+
+  @Column({ type: 'varchar', length: 20, nullable: true, name: 'start_date' })
+  startDate!: string | null;
+
+  @Column({ type: 'varchar', length: 20, nullable: true, name: 'end_date' })
+  endDate!: string | null;
+
   @Column({ type: 'int', name: 'sort_order', default: 0 })
   sortOrder!: number;
 

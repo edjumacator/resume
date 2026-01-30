@@ -23,21 +23,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
     >
       <Box sx={{ overflow: 'hidden', position: 'relative' }}>
         <CardMedia
-          component="div"
+          component="img"
           className="project-image"
+          image={project.imageUrl}
+          alt={project.title}
           sx={{
             height: 200,
-            background: `linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            objectFit: 'cover',
             transition: 'transform 0.3s ease',
           }}
-        >
-          <Typography variant="h3" sx={{ color: 'white', opacity: 0.2, fontWeight: 700 }}>
-            {project.title.charAt(0)}
-          </Typography>
-        </CardMedia>
+        />
       </Box>
       <CardContent sx={{ p: 3 }}>
         <Typography variant="h4" component="h3" gutterBottom>

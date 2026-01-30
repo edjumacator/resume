@@ -46,6 +46,12 @@ export const typeDefs = gql`
     tools: [String!]!
     imageUrl: String!
     link: String
+    description: String
+    githubUrl: String
+    demoUrl: String
+    featured: Boolean!
+    startDate: String
+    endDate: String
     sortOrder: Int!
   }
 
@@ -79,6 +85,7 @@ export const typeDefs = gql`
     projects(category: String): [Project!]!
     project(id: ID!): Project
     projectCategories: [String!]!
+    featuredProjects: [Project!]!
 
     testimonials: [Testimonial!]!
     testimonial(id: ID!): Testimonial

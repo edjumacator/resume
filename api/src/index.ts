@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import cors from 'cors';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
@@ -52,7 +52,7 @@ async function main() {
           db: AppDataSource,
         },
       }),
-    })
+    }) as unknown as RequestHandler
   );
 
   // Start server

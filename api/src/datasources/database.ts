@@ -10,6 +10,8 @@ import { ContactSubmission } from '../entities/ContactSubmission.js';
 
 config();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: process.env.DB_HOST || 'localhost',
@@ -18,7 +20,9 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || 'resume_password',
   database: process.env.DB_DATABASE || 'resume_db',
   synchronize: false,
-  logging: process.env.NODE_ENV !== 'production',
+  logging: !isProduction,
   entities: [Service, Experience, Skill, Project, Testimonial, ContactSubmission],
-  migrations: ['migrations/*.ts'],
+  // Migrations are only needed for migration:run command, not for API runtime
+  // The migrations container runs with NODE_ENV=development to use ts-node
+  migrations: isProduction ? [] : ['migrations/*.ts'],
 });

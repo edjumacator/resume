@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: resume-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-resume}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-resume_password}
+      POSTGRES_DB: ${DB_DATABASE:-resume_db}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-resume} -d ${DB_DATABASE:-resume_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - resume-network-dev
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    container_name: resume-api-dev
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: ${DB_USERNAME:-resume}
+      DB_PASSWORD: ${DB_PASSWORD:-resume_password}
+      DB_DATABASE: ${DB_DATABASE:-resume_db}
+      PORT: 4001
+      NODE_ENV: development
+    ports:
+      - "4001:4001"
+    volumes:
+      - ./api/src:/app/src
+      - ./api/migrations:/app/migrations
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "npm run migration:run && npm run dev"
+    networks:
+      - resume-network-dev
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: resume-frontend-dev
+    restart: unless-stopped
+    environment:
+      VITE_GRAPHQL_URL: http://localhost:4001/graphql
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./index.html:/app/index.html
+      - ./vite.config.ts:/app/vite.config.ts
+    depends_on:
+      - api
+    networks:
+      - resume-network-dev
+
+volumes:
+  postgres_data_dev:
+
+networks:
+  resume-network-dev:
+    driver: bridge

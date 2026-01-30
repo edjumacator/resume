@@ -30,6 +30,13 @@ export const projectResolvers = {
         .getRawMany();
       return projects.map((p) => p.category);
     },
+    featuredProjects: async (_: unknown, __: unknown, { dataSources }: GraphQLContext) => {
+      const repo = dataSources.db.getRepository(Project);
+      return repo.find({
+        where: { featured: true },
+        order: { sortOrder: 'ASC' },
+      });
+    },
   },
   Project: {
     __resolveReference: async (

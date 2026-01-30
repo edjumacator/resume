@@ -46,7 +46,7 @@ export function ExperienceSection() {
       <Container maxWidth="lg">
         <Grid container spacing={6}>
           {/* Left Column - Header */}
-          <Grid size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 3 }}>
             <Box sx={{ position: 'sticky', top: 100 }}>
               <Typography
                 variant="body1"
@@ -64,14 +64,15 @@ export function ExperienceSection() {
                 My Experience
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Over the years, I've had the privilege of working with amazing teams
-                and clients, constantly growing and refining my craft.
+                Full-stack engineer with a background in cloud infrastructure and
+                team leadership. I like solving interesting problems and helping
+                teams ship good software.
               </Typography>
             </Box>
           </Grid>
 
           {/* Right Column - Skills Filter & Timeline */}
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 9 }}>
             {loading ? (
               <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
                 <CircularProgress />
