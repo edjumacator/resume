@@ -4,9 +4,11 @@ import type { SkillCategory } from '../../types';
 
 interface SkillCategoryMeterListProps {
   categories: SkillCategory[];
+  selectedCategory?: string | null;
+  onCategoryClick?: (categoryName: string) => void;
 }
 
-export function SkillCategoryMeterList({ categories }: SkillCategoryMeterListProps) {
+export function SkillCategoryMeterList({ categories, selectedCategory, onCategoryClick }: SkillCategoryMeterListProps) {
   if (!categories || categories.length === 0) {
     return null;
   }
@@ -26,7 +28,12 @@ export function SkillCategoryMeterList({ categories }: SkillCategoryMeterListPro
         Proficiency
       </Typography>
       {categories.map((category) => (
-        <SkillCategoryMeter key={category.id} category={category} />
+        <SkillCategoryMeter
+          key={category.id}
+          category={category}
+          isSelected={selectedCategory === category.name}
+          onClick={onCategoryClick ? () => onCategoryClick(category.name) : undefined}
+        />
       ))}
     </Box>
   );

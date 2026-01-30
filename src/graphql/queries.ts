@@ -29,6 +29,11 @@ export const GET_EXPERIENCES = gql`
       description
       summary
       skills
+      skillsWithYears {
+        name
+        years
+        category
+      }
       sortOrder
     }
     aggregatedSkills {

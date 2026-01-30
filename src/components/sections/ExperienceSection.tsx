@@ -21,20 +21,71 @@ interface ExperiencesQueryResult {
   skillCategories: SkillCategory[];
 }
 
+// Maps skill category meter names to the skill categories they represent
+const categoryToSkillCategories: Record<string, string[]> = {
+  'Front-end': ['Frontend'],
+  'Back-end': ['Backend', 'Database'],
+  'DevOps': ['DevOps'],
+  'Security': ['Security'],
+  'Design': ['Frontend'], // Design skills are typically in Frontend category
+};
+
+// Get the dominant skill categories for an experience
+const getDominantCategories = (skills: SkillWithYears[] | undefined): string[] => {
+  if (!skills || skills.length === 0) return [];
+
+  // Count skills by category
+  const categoryCounts: Record<string, number> = {};
+  for (const skill of skills) {
+    if (skill.category) {
+      categoryCounts[skill.category] = (categoryCounts[skill.category] || 0) + 1;
+    }
+  }
+
+  // Find the max count
+  const maxCount = Math.max(...Object.values(categoryCounts));
+  if (maxCount === 0) return [];
+
+  // Return all categories that have the max count (handles ties)
+  return Object.entries(categoryCounts)
+    .filter(([, count]) => count === maxCount)
+    .map(([category]) => category);
+};
+
 export function ExperienceSection() {
   const { data, loading, error } = useQuery<ExperiencesQueryResult>(GET_EXPERIENCES);
   const [selectedSkills, setSelectedSkills] = useState<SkillWithYears[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  // Filter experiences based on selected skills
+  const handleCategoryClick = (categoryName: string) => {
+    setSelectedCategory((prev) => (prev === categoryName ? null : categoryName));
+  };
+
+  // Filter experiences based on selected skills and/or selected category
   const filteredExperiences = useMemo(() => {
     if (!data?.experiences) return [];
-    if (selectedSkills.length === 0) return data.experiences;
 
-    const selectedSkillNames = new Set(selectedSkills.map((s) => s.name));
-    return data.experiences.filter((exp) =>
-      exp.skills?.some((skill) => selectedSkillNames.has(skill))
-    );
-  }, [data?.experiences, selectedSkills]);
+    let filtered = data.experiences;
+
+    // Filter by category if selected - show experiences where the selected category is dominant
+    if (selectedCategory) {
+      const targetCategories = categoryToSkillCategories[selectedCategory] || [selectedCategory];
+      filtered = filtered.filter((exp) => {
+        const dominantCategories = getDominantCategories(exp.skillsWithYears);
+        return dominantCategories.some((dominant) => targetCategories.includes(dominant));
+      });
+    }
+
+    // Filter by selected skills if any
+    if (selectedSkills.length > 0) {
+      const selectedSkillNames = new Set(selectedSkills.map((s) => s.name));
+      filtered = filtered.filter((exp) =>
+        exp.skills?.some((skill) => selectedSkillNames.has(skill))
+      );
+    }
+
+    return filtered;
+  }, [data?.experiences, selectedSkills, selectedCategory]);
 
   return (
     <Box
@@ -71,7 +122,11 @@ export function ExperienceSection() {
                 teams ship good software.
               </Typography>
               {data?.skillCategories && (
-                <SkillCategoryMeterList categories={data.skillCategories} />
+                <SkillCategoryMeterList
+                  categories={data.skillCategories}
+                  selectedCategory={selectedCategory}
+                  onCategoryClick={handleCategoryClick}
+                />
               )}
             </Box>
           </Grid>
@@ -186,12 +241,13 @@ export function ExperienceSection() {
                       isOptionEqualToValue={(option, value) => option.name === value.name}
                       sx={{ width: '100%' }}
                     />
-                    {selectedSkills.length > 0 && (
+                    {(selectedSkills.length > 0 || selectedCategory) && (
                       <Typography
                         variant="body2"
                         sx={{ mt: 1, color: 'text.secondary' }}
                       >
                         Showing {filteredExperiences.length} of {data.experiences.length} experiences
+                        {selectedCategory && ` (filtered by ${selectedCategory})`}
                       </Typography>
                     )}
                   </Box>
