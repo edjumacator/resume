@@ -66,6 +66,14 @@ export const typeDefs = gql`
     sortOrder: Int!
   }
 
+  type SkillCategory @key(fields: "id") {
+    id: ID!
+    name: String!
+    proficiency: Float!
+    sortOrder: Int!
+    color: String
+  }
+
   type ContactSubmission @key(fields: "id") {
     id: ID!
     name: String!
@@ -90,6 +98,8 @@ export const typeDefs = gql`
 
     testimonials: [Testimonial!]!
     testimonial(id: ID!): Testimonial
+
+    skillCategories: [SkillCategory!]!
   }
 
   input ContactInput {

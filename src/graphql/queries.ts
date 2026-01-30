@@ -36,6 +36,13 @@ export const GET_EXPERIENCES = gql`
       years
       category
     }
+    skillCategories {
+      id
+      name
+      proficiency
+      sortOrder
+      color
+    }
   }
 `;
 

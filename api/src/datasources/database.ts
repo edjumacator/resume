@@ -7,6 +7,7 @@ import { Skill } from '../entities/Skill.js';
 import { Project } from '../entities/Project.js';
 import { Testimonial } from '../entities/Testimonial.js';
 import { ContactSubmission } from '../entities/ContactSubmission.js';
+import { SkillCategory } from '../entities/SkillCategory.js';
 
 config();
 
@@ -21,7 +22,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'resume_db',
   synchronize: false,
   logging: !isProduction,
-  entities: [Service, Experience, Skill, Project, Testimonial, ContactSubmission],
+  entities: [Service, Experience, Skill, Project, Testimonial, ContactSubmission, SkillCategory],
   // Migrations are only needed for migration:run command, not for API runtime
   // The migrations container runs with NODE_ENV=development to use ts-node
   migrations: isProduction ? [] : ['migrations/*.ts'],

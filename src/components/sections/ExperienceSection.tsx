@@ -11,12 +11,14 @@ import {
 } from '@mui/material';
 import { useQuery } from '@apollo/client/react';
 import { TimelineItem } from '../ui/TimelineItem';
+import { SkillCategoryMeterList } from '../ui/SkillCategoryMeterList';
 import { GET_EXPERIENCES } from '../../graphql/queries';
-import type { Experience, SkillWithYears } from '../../types';
+import type { Experience, SkillWithYears, SkillCategory } from '../../types';
 
 interface ExperiencesQueryResult {
   experiences: Experience[];
   aggregatedSkills: SkillWithYears[];
+  skillCategories: SkillCategory[];
 }
 
 export function ExperienceSection() {
@@ -68,6 +70,9 @@ export function ExperienceSection() {
                 team leadership. I like solving interesting problems and helping
                 teams ship good software.
               </Typography>
+              {data?.skillCategories && (
+                <SkillCategoryMeterList categories={data.skillCategories} />
+              )}
             </Box>
           </Grid>
 

@@ -60,3 +60,11 @@ export interface ContactSubmissionResult {
   success: boolean;
   message: string;
 }
+
+export interface SkillCategory {
+  id: string;
+  name: string;
+  proficiency: number;
+  sortOrder: number;
+  color?: string;
+}
