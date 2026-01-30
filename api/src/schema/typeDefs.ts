@@ -70,6 +70,7 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     email: String!
+    company: String
     message: String!
     createdAt: String!
   }
@@ -94,6 +95,7 @@ export const typeDefs = gql`
   input ContactInput {
     name: String!
     email: String!
+    company: String
     message: String!
     privacyAccepted: Boolean!
   }

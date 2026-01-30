@@ -78,6 +78,7 @@ export const SUBMIT_CONTACT = gql`
         id
         name
         email
+        company
         createdAt
       }
     }

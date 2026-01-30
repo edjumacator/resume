@@ -16,6 +16,9 @@ export class ContactSubmission {
   @Column({ type: 'varchar', length: 255 })
   email!: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  company?: string;
+
   @Column({ type: 'text' })
   message!: string;
 

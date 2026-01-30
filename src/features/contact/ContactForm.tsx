@@ -20,6 +20,7 @@ import type { ContactFormData } from '../../types';
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
+  company: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters'),
   privacyAccepted: z.boolean().refine((val) => val === true, {
     message: 'You must accept the privacy policy',
@@ -40,6 +41,7 @@ export function ContactForm() {
     defaultValues: {
       name: '',
       email: '',
+      company: '',
       message: '',
       privacyAccepted: false,
     },
@@ -103,6 +105,21 @@ export function ContactForm() {
                 fullWidth
                 error={!!errors.email}
                 helperText={errors.email?.message}
+                disabled={status === 'loading'}
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={12}>
+          <Controller
+            name="company"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Company (Optional)"
+                fullWidth
                 disabled={status === 'loading'}
               />
             )}

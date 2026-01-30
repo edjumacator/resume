@@ -9,6 +9,7 @@ export interface GraphQLContext {
 export interface ContactInput {
   name: string;
   email: string;
+  company?: string;
   message: string;
   privacyAccepted: boolean;
 }

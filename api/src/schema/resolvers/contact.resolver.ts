@@ -21,6 +21,7 @@ export const contactResolvers = {
       const submission = repo.create({
         name: input.name,
         email: input.email,
+        company: input.company,
         message: input.message,
         privacyAccepted: input.privacyAccepted,
       });
