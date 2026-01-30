@@ -30,6 +30,10 @@ const categoryToSkillCategories: Record<string, string[]> = {
   'Design': ['Frontend'], // Design skills are typically in Frontend category
 };
 
+// Categories that should match if ANY skills are present (not just dominant)
+// These are typically specializations that complement other work
+const useAnyMatchCategories = new Set(['Security', 'Design']);
+
 // Get the dominant skill categories for an experience
 const getDominantCategories = (skills: SkillWithYears[] | undefined): string[] => {
   if (!skills || skills.length === 0) return [];
@@ -52,13 +56,32 @@ const getDominantCategories = (skills: SkillWithYears[] | undefined): string[] =
     .map(([category]) => category);
 };
 
+// Check if experience has any skills in the target categories
+const hasAnySkillInCategories = (
+  skills: SkillWithYears[] | undefined,
+  targetCategories: string[]
+): boolean => {
+  if (!skills || skills.length === 0) return false;
+  return skills.some((skill) => skill.category && targetCategories.includes(skill.category));
+};
+
 export function ExperienceSection() {
   const { data, loading, error } = useQuery<ExperiencesQueryResult>(GET_EXPERIENCES);
   const [selectedSkills, setSelectedSkills] = useState<SkillWithYears[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const handleCategoryClick = (categoryName: string) => {
+    const isClearing = selectedCategory === categoryName;
     setSelectedCategory((prev) => (prev === categoryName ? null : categoryName));
+
+    // When applying a filter, scroll to keep the Experience section in view
+    // This prevents the page from jumping to the bottom when filtered content is shorter
+    if (!isClearing) {
+      const experienceSection = document.getElementById('experience');
+      if (experienceSection) {
+        experienceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
   };
 
   // Filter experiences based on selected skills and/or selected category
@@ -67,13 +90,22 @@ export function ExperienceSection() {
 
     let filtered = data.experiences;
 
-    // Filter by category if selected - show experiences where the selected category is dominant
+    // Filter by category if selected
     if (selectedCategory) {
       const targetCategories = categoryToSkillCategories[selectedCategory] || [selectedCategory];
-      filtered = filtered.filter((exp) => {
-        const dominantCategories = getDominantCategories(exp.skillsWithYears);
-        return dominantCategories.some((dominant) => targetCategories.includes(dominant));
-      });
+
+      // Some categories (like Security) match if ANY skills are present
+      // Others require the category to be dominant
+      if (useAnyMatchCategories.has(selectedCategory)) {
+        filtered = filtered.filter((exp) =>
+          hasAnySkillInCategories(exp.skillsWithYears, targetCategories)
+        );
+      } else {
+        filtered = filtered.filter((exp) => {
+          const dominantCategories = getDominantCategories(exp.skillsWithYears);
+          return dominantCategories.some((dominant) => targetCategories.includes(dominant));
+        });
+      }
     }
 
     // Filter by selected skills if any

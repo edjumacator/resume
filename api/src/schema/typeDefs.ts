@@ -45,6 +45,7 @@ export const typeDefs = gql`
     category: String!
     tools: [String!]!
     imageUrl: String!
+    imageUrls: [String!]!
     link: String
     description: String
     githubUrl: String

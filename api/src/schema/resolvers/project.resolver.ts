@@ -46,5 +46,19 @@ export const projectResolvers = {
       const repo = dataSources.db.getRepository(Project);
       return repo.findOneBy({ id: reference.id });
     },
+    imageUrl: (parent: Project) => {
+      // Return first image from imageUrls array, fallback to imageUrl field
+      if (parent.imageUrls && parent.imageUrls.length > 0) {
+        return parent.imageUrls[0];
+      }
+      return parent.imageUrl;
+    },
+    imageUrls: (parent: Project) => {
+      // Return imageUrls array, fallback to wrapping single imageUrl
+      if (parent.imageUrls && parent.imageUrls.length > 0) {
+        return parent.imageUrls;
+      }
+      return parent.imageUrl ? [parent.imageUrl] : [];
+    },
   },
 };

@@ -23,6 +23,9 @@ export class Project {
   @Column({ type: 'varchar', length: 255, name: 'image_url' })
   imageUrl!: string;
 
+  @Column({ type: 'varchar', array: true, name: 'image_urls', default: [] })
+  imageUrls!: string[];
+
   @Column({ type: 'varchar', length: 255, nullable: true })
   link!: string | null;
 

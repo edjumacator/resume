@@ -33,7 +33,14 @@ export interface Project {
   category: string;
   tools: string[];
   imageUrl: string;
+  imageUrls: string[];
   link?: string | null;
+  description?: string | null;
+  githubUrl?: string | null;
+  demoUrl?: string | null;
+  featured?: boolean;
+  startDate?: string | null;
+  endDate?: string | null;
   sortOrder?: number;
 }
 

@@ -59,7 +59,14 @@ export const GET_PROJECTS = gql`
       category
       tools
       imageUrl
+      imageUrls
       link
+      description
+      githubUrl
+      demoUrl
+      featured
+      startDate
+      endDate
       sortOrder
     }
     projectCategories
